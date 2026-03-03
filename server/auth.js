@@ -160,6 +160,75 @@ router.post('/logout', (req, res) => {
 });
 
 // ==========================================
+// RESET FORGOTTEN PASSWORD
+// ==========================================
+// request verification code for password reset
+router.post('/forgot-password', (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) {
+            return res.status(400).json({ message: 'Email is required' });
+        }
+        const user = excel.getUserByEmail(email);
+        if (!user) {
+            return res.status(404).json({ message: 'No account found for that email' });
+        }
+        // generate 6-digit code
+        const code = Math.floor(100000 + Math.random() * 900000).toString();
+        const expiry = Date.now() + 15 * 60 * 1000; // 15 minutes
+        excel.updateUser(user.ID, { 'Reset Code': code, 'Reset Expiry': expiry.toString() });
+
+        // simulate email sending by logging to console (demo only)
+        console.log(`Password reset code for ${email}: ${code}`);
+
+        res.json({ message: 'Verification code sent to your email (check server console for demo)' });
+    } catch (error) {
+        console.error('Forgot password error:', error);
+        res.status(500).json({ message: 'Error processing request' });
+    }
+});
+
+router.post('/reset-password', async (req, res) => {
+    try {
+        const { email, code, newPassword, confirmPassword } = req.body;
+        if (!email || !code || !newPassword || !confirmPassword) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json({ message: 'Passwords do not match' });
+        }
+
+        const user = excel.getUserByEmail(email);
+        if (!user) {
+            return res.status(404).json({ message: 'No account found for that email' });
+        }
+        if (!user['Reset Code'] || user['Reset Code'] !== code) {
+            return res.status(400).json({ message: 'Invalid or missing verification code' });
+        }
+        const now = Date.now();
+        const expiry = parseInt(user['Reset Expiry'] || '0', 10);
+        if (now > expiry) {
+            return res.status(400).json({ message: 'Verification code has expired' });
+        }
+
+        const hashed = await bcrypt.hash(newPassword, 10);
+        const updatedUser = excel.updateUser(user.ID, {
+            Password: hashed,
+            'Reset Code': '',
+            'Reset Expiry': ''
+        });
+        if (!updatedUser) {
+            return res.status(500).json({ message: 'Error updating password' });
+        }
+
+        res.json({ message: 'Password reset successfully' });
+    } catch (error) {
+        console.error('Password reset error:', error);
+        res.status(500).json({ message: 'Error resetting password' });
+    }
+});
+
+// ==========================================
 // BRANDING ROUTE
 // ==========================================
 

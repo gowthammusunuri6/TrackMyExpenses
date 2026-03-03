@@ -151,7 +151,123 @@ if (window.location.pathname === '/index.html' || window.location.pathname === '
     if (forgotLink) {
         forgotLink.addEventListener('click', function (e) {
             e.preventDefault();
-            alert('Password reset functionality is not implemented yet.\n\nFor demo purposes, please use:\nUser: user@demo.com / user123\nAdmin: admin@demo.com / admin123');
+            // navigate to reset page where user can enter details
+            window.location.href = '/forgot.html';
+        });
+    }
+}
+
+// ==========================================
+// FORGOT/RESET PAGE HANDLER
+// ==========================================
+if (window.location.pathname === '/forgot.html') {
+    // make sure we aren't already logged in
+    checkAuth();
+    loadBranding();
+
+    const toggleNew = document.getElementById('toggleNewPassword');
+    const toggleConfirm = document.getElementById('toggleConfirmPassword');
+    const newInput = document.getElementById('newPassword');
+    const confirmInput = document.getElementById('confirmPassword');
+
+    if (toggleNew && newInput) {
+        toggleNew.addEventListener('click', () => {
+            const type = newInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            newInput.setAttribute('type', type);
+            toggleNew.querySelector('i').classList.toggle('fa-eye');
+            toggleNew.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+    }
+    if (toggleConfirm && confirmInput) {
+        toggleConfirm.addEventListener('click', () => {
+            const type = confirmInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmInput.setAttribute('type', type);
+            toggleConfirm.querySelector('i').classList.toggle('fa-eye');
+            toggleConfirm.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+    }
+
+    const forgotForm = document.getElementById('forgotForm');
+    const sendCodeBtn = document.getElementById('sendCodeBtn');
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+
+    if (sendCodeBtn) {
+        sendCodeBtn.addEventListener('click', async () => {
+            const email = document.getElementById('forgotEmail').value.trim();
+            const alertEl = document.getElementById('forgotAlert');
+            const alertMsg = document.getElementById('forgotAlertMessage');
+            alertEl.classList.add('hidden');
+
+            if (!email) {
+                alertMsg.textContent = 'Please provide your email';
+                alertEl.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                const resp = await fetch('/api/forgot-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const data = await resp.json();
+                if (resp.ok) {
+                    alert(data.message);
+                    // show next step
+                    step1.style.display = 'none';
+                    step2.style.display = 'block';
+                } else {
+                    alertMsg.textContent = data.message || 'Error sending code';
+                    alertEl.classList.remove('hidden');
+                }
+            } catch (err) {
+                alertMsg.textContent = 'Connection error';
+                alertEl.classList.remove('hidden');
+            }
+        });
+    }
+
+    if (forgotForm) {
+        forgotForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('forgotEmail').value.trim();
+            const code = document.getElementById('verificationCode').value.trim();
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const alertEl = document.getElementById('forgotAlert');
+            const alertMsg = document.getElementById('forgotAlertMessage');
+
+            alertEl.classList.add('hidden');
+            if (!code) {
+                alertMsg.textContent = 'Please enter the verification code';
+                alertEl.classList.remove('hidden');
+                return;
+            }
+            if (newPassword !== confirmPassword) {
+                alertMsg.textContent = 'Passwords do not match';
+                alertEl.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                const resp = await fetch('/api/reset-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, code, newPassword, confirmPassword })
+                });
+                const data = await resp.json();
+                if (resp.ok) {
+                    alert('Password has been reset. You can now log in with your new password.');
+                    window.location.href = '/';
+                } else {
+                    alertMsg.textContent = data.message || 'Error resetting password';
+                    alertEl.classList.remove('hidden');
+                }
+            } catch (err) {
+                alertMsg.textContent = 'Connection error';
+                alertEl.classList.remove('hidden');
+            }
         });
     }
 }

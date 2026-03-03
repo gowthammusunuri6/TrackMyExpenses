@@ -5,7 +5,21 @@
 .dashboard-layout {
     display: flex;
     min-height: 100vh;
-    background: var(--light-gray);
+    background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #1a1a2e);
+    background-size: 400% 400%;
+    animation: dashGradient 15s ease infinite;
+}
+
+@keyframes dashGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 /* ==========================================
@@ -68,9 +82,10 @@
 }
 
 .nav-link:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--white);
-    transform: translateX(5px);
+    background: rgba(0, 255, 255, 0.2);
+    color: #00ffff;
+    transform: translateX(8px);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
 }
 
 .nav-link.active {
@@ -150,6 +165,7 @@
 
 .dashboard-content {
     padding: var(--spacing-xl);
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(245, 87, 108, 0.05) 100%);
 }
 
 /* ==========================================
@@ -285,7 +301,9 @@
 }
 
 .transaction-item:hover {
-    background: var(--gray);
+    background: rgba(0, 255, 255, 0.1);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    border-left: 4px solid #00ffff;
 }
 
 .transaction-left {
@@ -378,8 +396,8 @@
 }
 
 .chatbot-toggle:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 24px rgba(102, 126, 234, 0.6);
+    transform: scale(1.15);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.7);
 }
 
 .chatbot-toggle.active {
@@ -434,7 +452,9 @@
 }
 
 .chatbot-close:hover {
-    transform: rotate();
+    transform: rotate(90deg) scale(1.2);
+    color: #00ffff;
+    text-shadow: 0 0 10px #00ffff;
 }
 
 .chatbot-body {
@@ -515,9 +535,11 @@
 }
 
 .suggestion-chip:hover {
-    background: var(--primary);
+    background: linear-gradient(135deg, #00ffff, #00ccff);
     color: var(--white);
-    border-color: var(--primary);
+    border-color: #00ffff;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    transform: scale(1.05);
 }
 
 .chatbot-footer {
@@ -552,7 +574,9 @@
 }
 
 .chatbot-send:hover {
-    transform: scale(1.1);
+    transform: scale(1.15) rotate(15deg);
+    color: #00ffff;
+    text-shadow: 0 0 10px #00ffff;
 }
 
 .typing-indicator {

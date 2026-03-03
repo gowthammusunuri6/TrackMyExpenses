@@ -27,9 +27,9 @@ function initializeFiles() {
     if (!fs.existsSync(USERS_FILE)) {
         const usersWorkbook = XLSX.utils.book_new();
         const usersData = [
-            ['ID', 'Full Name', 'Email', 'Password', 'Role', 'Created At', 'Budget', 'Custom Logo', 'Custom Title'],
-            ['1', 'Demo User', 'user@demo.com', '$2b$10$rQZ5Y9qZGvIzQJJ8vJ0YZek.OqZkqZkqZkqZkqZkqZkqZkqZkqZkq', 'user', new Date().toISOString(), '50000', '', ''],
-            ['2', 'Admin User', 'admin@demo.com', '$2b$10$rQZ5Y9qZGvIzQJJ8vJ0YZek.OqZkqZkqZkqZkqZkqZkqZkqZkqZkq', 'admin', new Date().toISOString(), '100000', '', '']
+            ['ID', 'Full Name', 'Email', 'Password', 'Role', 'Created At', 'Budget', 'Custom Logo', 'Custom Title', 'Reset Code', 'Reset Expiry'],
+            ['1', 'Demo User', 'user@demo.com', '$2b$10$rQZ5Y9qZGvIzQJJ8vJ0YZek.OqZkqZkqZkqZkqZkqZkqZkqZkqZkq', 'user', new Date().toISOString(), '50000', '', '', '', ''],
+            ['2', 'Admin User', 'admin@demo.com', '$2b$10$rQZ5Y9qZGvIzQJJ8vJ0YZek.OqZkqZkqZkqZkqZkqZkqZkqZkqZkq', 'admin', new Date().toISOString(), '100000', '', '', '', '']
         ];
         const usersSheet = XLSX.utils.aoa_to_sheet(usersData);
         XLSX.utils.book_append_sheet(usersWorkbook, usersSheet, 'Users');

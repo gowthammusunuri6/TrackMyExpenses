@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password - TrackMyExpenses</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="auth-page">
+    <div class="auth-background">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+    </div>
+
+    <div class="auth-container animate-fade-in-up">
+        <div class="auth-header">
+            <div class="logo-container">
+                <img src="/images/logo.png" alt="Logo" class="auth-logo" id="brandLogo">
+            </div>
+            <h1 class="auth-title" id="brandTitle">TrackMyExpenses</h1>
+            <p class="auth-subtitle">Reset your account password</p>
+        </div>
+
+        <div class="auth-card glass-card">
+            <h2 class="form-title">Forgot Password</h2>
+            <p class="form-subtitle">Enter your email and a new password</p>
+
+            <form id="forgotForm" class="auth-form">
+                <!-- step 1: enter email to receive code -->
+                <div id="step1">
+                    <div class="form-group">
+                        <label for="forgotEmail" class="form-label">
+                            <i class="fas fa-envelope"></i> Email Address
+                        </label>
+                        <input type="email" id="forgotEmail" name="email" class="form-input" placeholder="you@example.com" required>
+                    </div>
+
+                    <button type="button" class="btn btn-secondary btn-block" id="sendCodeBtn">
+                        <i class="fas fa-paper-plane"></i>
+                        Send Code
+                    </button>
+                </div>
+
+                <!-- step 2: verify code and set new password -->
+                <div id="step2" style="display: none;">
+                    <div class="form-group">
+                        <label for="verificationCode" class="form-label">
+                            <i class="fas fa-key"></i> Verification Code
+                        </label>
+                        <input type="text" id="verificationCode" class="form-input" placeholder="6-digit code" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newPassword" class="form-label">
+                            <i class="fas fa-lock"></i> New Password
+                        </label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="newPassword" class="form-input" placeholder="New password" required>
+                            <button type="button" class="password-toggle" id="toggleNewPassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword" class="form-label">
+                            <i class="fas fa-lock"></i> Confirm Password
+                        </label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm password" required>
+                            <button type="button" class="password-toggle" id="toggleConfirmPassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-sync-alt"></i>
+                        Reset Password
+                    </button>
+                </div>
+
+                <div class="alert alert-danger hidden" id="forgotAlert">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="forgotAlertMessage"></span>
+                </div>
+            </form>
+
+            <div class="auth-footer">
+                <p>Remembered? <a href="/" class="auth-link">Sign In</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+</body>
+
+</html>

@@ -79,6 +79,10 @@ app.get('/profile.html', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/profile.html'));
 });
 
+app.get('/forgot.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/forgot.html'));
+});
+
 app.get('/test-button.html', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/test-button.html'));
 });
