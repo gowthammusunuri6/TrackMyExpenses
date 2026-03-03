@@ -140,8 +140,10 @@
         document.getElementById('profileForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const fullName = document.getElementById('fullName').value;
-            const budget = document.getElementById('budget').value;
+            const fullName = document.getElementById('fullName').value.trim();
+            // parse budget as float; if left blank we'll send undefined so server won't override
+            const budgetInput = document.getElementById('budget').value;
+            const budget = budgetInput === '' ? undefined : parseFloat(budgetInput);
 
             try {
                 const response = await fetch(`/api/profile/${currentUser.id}`, {
@@ -154,8 +156,14 @@
 
                 if (response.ok) {
                     alert('Profile updated successfully!');
+                    // update local copy of the user
                     currentUser.fullName = data.user.fullName;
+                    if (typeof data.user.budget !== 'undefined') {
+                        currentUser.budget = data.user.budget;
+                    }
                     sessionStorage.setItem('user', JSON.stringify(currentUser));
+                    // refresh displayed values just in case
+                    loadProfile();
                 } else {
                     alert(data.message || 'Error updating profile');
                 }

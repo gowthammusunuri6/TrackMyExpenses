@@ -256,15 +256,24 @@ router.get('/profile/:userId', (req, res) => {
 router.put('/profile/:userId', (req, res) => {
     try {
         // Users can only update their own profile, admins can update any profile
-        if (req.session.userId !== req.params.userId && req.session.userRole !== 'admin') {
+        // convert both sides to string in case one is number and the other is string
+        const sessionId = String(req.session.userId);
+        const targetId = String(req.params.userId);
+        if (sessionId !== targetId && req.session.userRole !== 'admin') {
             return res.status(403).json({ message: 'You can only update your own profile' });
         }
 
+        // accept both fullName and budget even if they are falsy values (Budget = 0)
         const { fullName, budget } = req.body;
         const updateData = {};
 
-        if (fullName) updateData['Full Name'] = fullName;
-        if (budget) updateData['Budget'] = budget;
+        if (typeof fullName !== 'undefined' && fullName !== null && fullName !== '') {
+            updateData['Full Name'] = fullName;
+        }
+        if (typeof budget !== 'undefined' && budget !== null && budget !== '') {
+            // store as number or string, excel module will keep it as provided
+            updateData['Budget'] = budget;
+        }
 
         const updatedUser = excel.updateUser(req.params.userId, updateData);
 
