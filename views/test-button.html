@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Button Visibility</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .test-section {
+            background: white;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Login Button Test Page</h1>
+
+    <div class="test-section">
+        <h2>Test 1: Simple Button</h2>
+        <button type="button" class="btn btn-primary">
+            <i class="fas fa-check"></i>
+            Simple Test Button
+        </button>
+        <div class="status" id="status1">Button should appear above</div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Block Button (Full Width)</h2>
+        <button type="submit" class="btn btn-primary btn-block">
+            <i class="fas fa-sign-in-alt"></i>
+            Sign In (Test)
+        </button>
+        <div class="status" id="status2">Full-width button should appear above</div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Form with Button</h2>
+        <form id="testForm">
+            <input type="email" placeholder="Email"
+                style="width: 100%; padding: 10px; margin-bottom: 10px; border: 2px solid #ddd; border-radius: 5px;">
+            <input type="password" placeholder="Password"
+                style="width: 100%; padding: 10px; margin-bottom: 10px; border: 2px solid #ddd; border-radius: 5px;">
+            <button type="submit" class="btn btn-primary btn-block">
+                Login Button in Form
+            </button>
+        </form>
+        <div class="status" id="status3">Form button should appear above</div>
+    </div>
+
+    <div class="test-section">
+        <h2>CSS File Loading Test</h2>
+        <p>Check if main.css loads:</p>
+        <link rel="stylesheet" href="/css/main.css">
+        <button type="button" class="btn btn-primary" style="margin-top: 10px;">
+            Button with Main.css
+        </button>
+        <p id="cssStatus" style="margin-top: 15px; padding: 10px; background: #fff3cd; border-left: 4px solid #ff9800;">
+            If this button looks like the others above, main.css is loaded correctly.
+        </p>
+    </div>
+
+    <div class="test-section">
+        <h2>Instructions</h2>
+        <ol>
+            <li>All buttons above should be visible with purple gradient backgrounds</li>
+            <li>Buttons should have rounded corners</li>
+            <li>Hovering should lift the button slightly</li>
+            <li>If buttons are not visible, check browser console for CSS loading errors</li>
+        </ol>
+        <button onclick="runDiagnostics()" class="btn btn-primary" style="margin-top: 15px;">
+            Run Diagnostics
+        </button>
+        <div id="diagnostics" style="margin-top: 15px;"></div>
+    </div>
+
+    <script>
+        function runDiagnostics() {
+            const diagnosticsDiv = document.getElementById('diagnostics');
+            let report = '<h3>Diagnostic Report:</h3><ul>';
+
+            // Check if CSS files are loaded
+            const sheets = document.styleSheets;
+            report += `<li>Total stylesheets loaded: ${sheets.length}</li>`;
+
+            // Check button visibility
+            const buttons = document.querySelectorAll('.btn');
+            report += `<li>Total buttons found: ${buttons.length}</li>`;
+
+            buttons.forEach((btn, index) => {
+                const styles = window.getComputedStyle(btn);
+                report += `<li>Button ${index + 1}:
+                    <ul>
+                        <li>Display: ${styles.display}</li>
+                        <li>Visibility: ${styles.visibility}</li>
+                        <li>Opacity: ${styles.opacity}</li>
+                        <li>Background: ${styles.background.substring(0, 50)}...</li>
+                    </ul>
+                </li>`;
+            });
+
+            report += '</ul>';
+            diagnosticsDiv.innerHTML = report;
+            diagnosticsDiv.style.background = '#e3f2fd';
+            diagnosticsDiv.style.padding = '15px';
+            diagnosticsDiv.style.borderLeft = '4px solid #2196f3';
+            diagnosticsDiv.style.borderRadius = '5px';
+        }
+
+        // Test form submission
+        document.getElementById('testForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert('Test form submitted successfully! The button is working.');
+        });
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</body>
+
+</html>
